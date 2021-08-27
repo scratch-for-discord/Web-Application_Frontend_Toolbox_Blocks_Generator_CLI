@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import commander from "commander";
 import s4d from "../src/index.js";
 import enquirer from "enquirer";

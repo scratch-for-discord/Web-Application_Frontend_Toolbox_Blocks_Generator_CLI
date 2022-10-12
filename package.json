@@ -1,13 +1,10 @@
 {
-  "name": "s4d-dev-snippets",
-  "version": "2.1.0",
-  "description": "Sippets for s4d devs",
+  "name": "s4d-block-generator",
+  "version": "2.2.3",
+  "description": "CLI tool to automate the block making process for Scratch for Discord developers",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "LimeNade from s4d",
+  "author": "LimeNade",
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.1.0",

@@ -7,6 +7,7 @@ const warning = chalk.hex('#FFA500').bold;
 const error = chalk.bold.red;
 const info = chalk.hex('#4787ed').bold
 let developperMode = false
+let codeDataHandler = false
 
 class BlockData {
     constructor(blockName, blockColor, blockTooltip, blockHelpUrl, fieldData) {
@@ -32,7 +33,11 @@ class BlockData {
                 args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], check: this.fieldData[i][2] }))
             }
         }
-        let blockDataOutput = `import * as Blockly from 'blockly/core';\n\nconst blockName = "${this.blockName}"\n\nconst blockData = {\n    "type": "${this.blockName}",\n    "message0":"${message0}",\n    "args0": ${args0},\n    "colour": "${this.blockColor[0]}",\n    "tooltip":"${this.blockTooltip}",\n    "helpUrl":"${this.blockHelpUrl}"\n    }\n\nBlockly.Blocks[blockName] = {\n    init: function() {\n        this.jsonInit(blockData)\n    }\n\nBlockly.JavaScript[blockName] = function (block) {\n    let code = ''\n    return code\n}`
+        let blockDataOutput = ''
+        if (codeDataHandler == true) { blockDataOutput = `import * as Blockly from 'blockly/core';\n\nconst blockName = "${this.blockName}"\n\nconst blockData = {\n    "type": "${this.blockName}",\n    "message0":"${message0}",\n    "args0": ${args0},\n    "colour": "${this.blockColor[0]}",\n    "tooltip":"${this.blockTooltip}",\n    "helpUrl":"${this.blockHelpUrl}"\n    }\n\nBlockly.Blocks[blockName] = {\n    init: function() {\n        this.jsonInit(blockData)\n    }, onchange: function() {\n        let BlockValuesSet = (color, output, outputBool) => {\n            this.setColour(color)\n            if (output == null) {this.setOutput(outputBool)} else {this.setOutput(outputBool, output)}\n        }\n    }\n}\n\nBlockly.JavaScript[blockName] = function (block) {\n    let code = ''\n    return code\n}` } else if (codeDataHandler == false) {
+            blockDataOutput = `import * as Blockly from 'blockly/core';\n\nconst blockName = "${this.blockName}"\n\nconst blockData = {\n    "type": "${this.blockName}",\n    "message0":"${message0}",\n    "args0": ${args0},\n    "colour": "${this.blockColor[0]}",\n    "tooltip":"${this.blockTooltip}",\n    "helpUrl":"${this.blockHelpUrl}"\n    }\n\nBlockly.Blocks[blockName] = {\n    init: function() {\n        this.jsonInit(blockData)\n    }\n}\n\nBlockly.JavaScript[blockName] = function (block) {\n    let code = ''\n    return code\n}`
+        }
+
         return blockDataOutput
     }
 }
@@ -49,9 +54,23 @@ async function askDevMode() {
     if (answer == 'Yes') developperMode = true
 }
 
+async function askBlockDataHandler() {
+    const dataHandler = await inquirer.prompt({
+        name: 'data_handler',
+        type: 'list',
+        message: 'Do you like to add the block data handler in your code??',
+        choices: ['Yes', 'No']
+    })
+
+    let answer = dataHandler.data_handler
+    if (answer == 'Yes') codeDataHandler = true
+
+}
+
 async function startup() {
     console.clear()
     await askDevMode()
+    await askBlockDataHandler()
 }
 
 async function setBlockName() {

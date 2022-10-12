@@ -7,15 +7,15 @@ const warning = chalk.hex('#FFA500');
 const error = chalk.bold.red;
 const info = chalk.hex('#4787ed').bold
 
-class BlockData {
-    constructor(blockName, blockData, color, tooltip, helpurl) {
-        this.blockName = blockName
-        this.blockData = blockData
-        this.color = color
-        this.tooltip = tooltip
-        this.helpurl = helpurl
-    }
-}
+// class BlockData {
+//     constructor(blockName, blockData, color, tooltip, helpurl) {
+//         this.blockName = blockName
+//         this.blockData = blockData
+//         this.color = color
+//         this.tooltip = tooltip
+//         this.helpurl = helpurl
+//     }
+// }
 
 function startup() {
     console.clear()

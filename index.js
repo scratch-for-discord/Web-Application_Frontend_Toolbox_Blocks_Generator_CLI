@@ -6,6 +6,7 @@ import chalk from 'chalk'
 const warning = chalk.hex('#FFA500').bold;
 const error = chalk.bold.red;
 const info = chalk.hex('#4787ed').bold
+let developperMode = false
 
 class BlockData {
     constructor(blockName, blockColor, blockTooltip, blockHelpUrl, fieldData) {
@@ -23,7 +24,9 @@ class BlockData {
             number_of_fields++
             message0 += ` %${number_of_fields}`
             JSON.stringify(message0)
-            if (this.fieldData[i][0] != 'input_value' || this.fieldData[i][0] != 'field_dropdown') {
+            if (this.fieldData[i][0] == 'field_dropdown') {
+                args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], options: this.fieldData[i][2] }))
+            } else if (this.fieldData[i][0] != 'input_value' || this.fieldData[i][0] != 'field_dropdown') {
                 args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], text: this.fieldData[i][2] }))
             } else if (this.fieldData[i][0] != 'field_label' || this.fieldData[i][0] != 'field_dropdown') {
                 args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], check: this.fieldData[i][2] }))
@@ -34,8 +37,21 @@ class BlockData {
     }
 }
 
-function startup() {
+async function askDevMode() {
+    const devMode = await inquirer.prompt({
+        name: 'dev_mode',
+        type: 'list',
+        message: 'Do you want to eable debug mode?',
+        choices: ['Yes', 'No']
+    })
+
+    let answer = devMode.dev_mode
+    if (answer == 'Yes') developperMode = true
+}
+
+async function startup() {
     console.clear()
+    await askDevMode()
 }
 
 async function setBlockName() {
@@ -50,7 +66,7 @@ async function setBlockName() {
 
     let answer = blockName.block_name
     let usableBlockName = answer.split(' ').join('_')
-    console.info(info(`Function name -> setBlockName \nBlock name -> ${usableBlockName} \nRaw answer -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> setBlockName \nBlock name -> ${usableBlockName} \nRaw answer -> ${answer}`))
 
     return usableBlockName
 }
@@ -66,7 +82,7 @@ async function setBlockTooltip() {
     })
 
     let answer = blockTooltip.block_tooltip
-    console.info(info(`Function name -> setBlockName \nBlock tooltip -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> setBlockTooltip \nBlock tooltip -> ${answer}`))
 
     return answer
 }
@@ -75,14 +91,14 @@ async function setBlockHelpUrl() {
     const blockHelpUrl = await inquirer.prompt({
         name: 'block_help_url',
         type: 'input',
-        message: 'Enter the tooltip of your block',
+        message: 'Enter the help URL of your block',
         default() {
-            return 'Some Tooltip'
+            return 'https://s4d469.vercel.app'
         },
     })
 
     let answer = blockHelpUrl.block_help_url
-    console.info(info(`Function name -> setBlockName \nBlock tooltip -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> setBlockHelpUrl \nBlock helpUrl -> ${answer}`))
 
     return answer
 }
@@ -101,7 +117,7 @@ async function setBlockColor() {
     const answer = blockColor.block_color
     const checkHex = /^#([0-9a-f]{3}){1,2}$/i.test(answer)
     const returnValue = [answer, checkHex]
-    console.info(info(`Function name -> setBlockColor \nBlock color -> ${answer} \nIs color hex -> ${checkHex}\nReturned value -> ${returnValue}`))
+    if (developperMode) console.info(info(`Function name -> setBlockColor \nBlock color -> ${answer} \nIs color hex -> ${checkHex}\nReturned value -> ${returnValue}`))
     return returnValue
 
 }
@@ -133,7 +149,7 @@ async function createNewField() {
         default:
             fieldtype = null
     }
-    console.info(info(`Function name -> createNewField \nField type -> ${fieldtype} \nAnswer -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> createNewField \nField type -> ${fieldtype} \nAnswer -> ${answer}`))
     return fieldtype
 
 }
@@ -150,7 +166,7 @@ async function setFieldName() {
 
     let answer = fieldName.field_name
     let usableFieldName = [answer.split(' ').join('_')]
-    console.info(info(`Function name -> setFieldName \nField name -> ${usableFieldName} \nRaw answer -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> setFieldName \nField name -> ${usableFieldName} \nRaw answer -> ${answer}`))
 
     return usableFieldName
 }
@@ -171,31 +187,71 @@ async function setFieldValue(fieldtype) {
     })
 
     let answer = fieldValue.field_value
-    console.info(info(`Function name -> setFieldValue \nAnswer -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> setFieldValue \nAnswer -> ${answer}`))
+
+    return answer
+}
+
+async function setDropDownOptionValue() {
+    const optionValue = await inquirer.prompt({
+        name: 'option_value',
+        type: 'input',
+        message: 'Set the drop-down option text',
+        default() {
+            return 'User Banner'
+        },
+    })
+
+    let answer = optionValue.option_value
+    if (developperMode) console.info(info(`Function name -> setDropDownOptionValue \nAnswer -> ${answer}`))
+
+    return answer
+}
+
+async function setDropDownOptionName() {
+    const optionName = await inquirer.prompt({
+        name: 'option_name',
+        type: 'input',
+        message: 'Set the drop-down option name',
+        default() {
+            return '.banner'
+        },
+    })
+
+    let answer = optionName.option_name
+    let usableOptionName = answer.split(' ').join('_')
+    if (developperMode) console.info(info(`Function name -> setDropDownOptionName\nReturned Value -> ${usableOptionName} \nRaw Answer -> ${answer}`))
+
+    return answer
+}
+
+async function createNewDropdownOption() {
+    const newDropdownOption = await inquirer.prompt({
+        name: 'new_dropdown_option',
+        type: 'list',
+        message: 'Do you want to create a new drop-down option?',
+        choices: ['Yes', 'No']
+    })
+
+    let answer = newDropdownOption.new_dropdown_option
+    if (developperMode) console.info(info(`Function name -> createNewDropdownOption \nAnswer -> ${answer}`))
 
     return answer
 }
 
 async function setField() {
     let newfield = [await createNewField(), await setFieldName()]
+    let dropdownOptions = []
     if (newfield[0] != 'field_dropdown') {
         newfield.push(await setFieldValue(newfield[0]))
     } else if (newfield[0] == 'field_dropdown') {
-        console.log(error('DROPDOWN FIELD NOT FINISHED!'))
-        return 'ERROR'
+        while (true) {
+            dropdownOptions.push([await setDropDownOptionValue(), await setDropDownOptionName()])
+            let quit = await createNewDropdownOption()
+            if (quit == 'Yes') { continue } else if (quit == 'No') { break }
+        }
+        newfield.push(dropdownOptions)
     }
-    // const fieldType = await createNewField()
-    //     console.log(info(fieldType))
-    //     let fieldName = await setFieldName()
-    //     fieldType.push(fieldName)
-    //     let fieldValue = ''
-    //     if (fieldType != "field_dropdown") {
-    //         fieldValue = await setFieldValue(fieldType)
-    //         fieldType.push(fieldValue)
-    //         return fieldName
-    //     } else if (fieldType == "field_dropdown") {
-    //         return console.log(error('Error: dropdown not implemeted yet!'))
-    //     }
     return newfield
 }
 
@@ -209,25 +265,34 @@ async function continueBuilding() {
     })
 
     let answer = continueBuildingField.continue_building
-    console.info(info(`Function name -> continueBuilding \nAnswer -> ${answer}`))
+    if (developperMode) console.info(info(`Function name -> continueBuilding \nAnswer -> ${answer}`))
 
     return answer
 }
 
 async function main() {
 
-    startup()
+    await startup()
     let fieldData = []
 
     // Getting Variables to initiate the class
     const block_name = await setBlockName()
-    const blockColor = await setBlockColor()
+    let blockColor = ''
+    while (true) {
+        blockColor = await setBlockColor()
+        if (blockColor[1] == false) {
+            console.log(error('The color you entered is not a valid hex colour!'))
+            continue
+        } else if (blockColor[1] == true) {
+            break
+        }
+    }
     const blockTooltip = await setBlockTooltip()
     const blockHelpUrl = await setBlockHelpUrl()
 
     while (true) {
         fieldData.push(await setField())
-        console.info(info(fieldData))
+        if (developperMode) console.info(info(fieldData))
         const continue_building = await continueBuilding()
         if (continue_building == 'Finish block') {
             break
@@ -236,7 +301,7 @@ async function main() {
         }
     }
 
-    console.info(error(fieldData))
+    if (developperMode) console.info(error(fieldData))
     let blokdata = new BlockData(block_name, blockColor, blockTooltip, blockHelpUrl, fieldData)
     const output = blokdata.generateBlockData()
     console.log(warning(output))

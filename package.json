@@ -1,36 +1,16 @@
 {
-  "name": "scratch-for-discord",
-  "version": "1.0.1",
-  "description": "Scratch For Discord blocks generator",
-  "main": "src/index.js",
-  "bin": {
-    "scratch-for-discord": "bin/index.mjs",
-    "s4d": "bin/index.mjs"
-  },
-  "preferGlobal": true,
-  "files": [
-    "bin",
-    "src"
-  ],
+  "name": "s4d-dev-snippets",
+  "version": "2.0.0",
+  "description": "Sippets for s4d devs",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "node bin/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scratch-for-discord/cli.git"
-  },
-  "keywords": [
-    "s4d"
-  ],
-  "author": "DevAndromeda",
+  "author": "LimeNade from s4d",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/scratch-for-discord/cli/issues"
-  },
-  "homepage": "https://github.com/scratch-for-discord/cli#readme",
   "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^8.1.0",
-    "enquirer": "^2.3.6"
+    "chalk": "^5.1.0",
+    "inquirer": "^9.1.3"
   }
 }

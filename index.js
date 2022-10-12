@@ -241,7 +241,7 @@ async function setDropDownOptionName() {
     let usableOptionName = answer.split(' ').join('_')
     if (developperMode) console.info(info(`Function name -> setDropDownOptionName\nReturned Value -> ${usableOptionName} \nRaw Answer -> ${answer}`))
 
-    return answer
+    return usableOptionName
 }
 
 async function createNewDropdownOption() {

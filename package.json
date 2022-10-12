@@ -1,36 +1,16 @@
 {
-  "name": "scratch-for-discord",
-  "version": "1.0.1",
-  "description": "Scratch For Discord blocks generator",
-  "main": "src/index.js",
-  "bin": {
-    "scratch-for-discord": "bin/index.mjs",
-    "s4d": "bin/index.mjs"
-  },
-  "preferGlobal": true,
-  "files": [
-    "bin",
-    "src"
-  ],
-  "scripts": {
-    "test": "node bin/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scratch-for-discord/cli.git"
-  },
-  "keywords": [
-    "s4d"
-  ],
-  "author": "DevAndromeda",
+  "name": "s4d-block-generator",
+  "version": "2.2.4",
+  "description": "CLI tool to automate the block making process for Scratch for Discord developers",
+  "main": "index.js",
+  "type": "module",
+  "author": "LimeNade",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/scratch-for-discord/cli/issues"
-  },
-  "homepage": "https://github.com/scratch-for-discord/cli#readme",
   "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^8.1.0",
-    "enquirer": "^2.3.6"
+    "chalk": "^5.1.0",
+    "inquirer": "^9.1.3"
+  },
+  "scripts": {
+    "newblock": "node index.js"
   }
 }

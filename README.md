@@ -1,23 +1,17 @@
-# Scratch For Discord
+#  **S4D Block Generator**
 
-A very simple CLI to generate Scratch For Discord block projects.
+### Use this CLI tool to generate your own  [Scratch for Discord](https://s4d469.vercel.app) blocks within seconds! 🧱
+</br>
 
-# Example
+## **Simple to use!**
+  ### Install the packages
+  `npm i`
+  ### Run node
+  `node .`
+  ### Answer the form
+  ![example](./examples/example1.png)
 
-## Install
+  ## **And get a new fresh Blockly block!**
+  ![example2](./examples/example2.png)
 
-```sh
-$ npm i -g scratch-for-discord
-```
-
-## Generate
-
-```sh
-$ scratch-for-discord --init
-```
-
-# Or via npx
-
-```sh
-$ npx scratch-for-discord --init
-```
+## Made by LimeNade with ❤ ;)

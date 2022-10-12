@@ -1,6 +1,6 @@
 {
   "name": "s4d-dev-snippets",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Sippets for s4d devs",
   "main": "index.js",
   "type": "module",

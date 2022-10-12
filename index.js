@@ -3,19 +3,36 @@ import inquirer from 'inquirer'
 import chalk from 'chalk'
 
 //Setting Chalk
-const warning = chalk.hex('#FFA500');
+const warning = chalk.hex('#FFA500').bold;
 const error = chalk.bold.red;
 const info = chalk.hex('#4787ed').bold
 
-// class BlockData {
-//     constructor(blockName, blockData, color, tooltip, helpurl) {
-//         this.blockName = blockName
-//         this.blockData = blockData
-//         this.color = color
-//         this.tooltip = tooltip
-//         this.helpurl = helpurl
-//     }
-// }
+class BlockData {
+    constructor(blockName, blockColor, blockTooltip, blockHelpUrl, fieldData) {
+        this.blockName = blockName
+        this.blockColor = blockColor
+        this.blockTooltip = blockTooltip
+        this.blockHelpUrl = blockHelpUrl
+        this.fieldData = fieldData
+    }
+    generateBlockData() {
+        let number_of_fields = 0
+        let message0 = ''
+        let args0 = []
+        for (let i = 0; i < this.fieldData.length; i++) {
+            number_of_fields++
+            message0 += ` %${number_of_fields}`
+            JSON.stringify(message0)
+            if (this.fieldData[i][0] != 'input_value' || this.fieldData[i][0] != 'field_dropdown') {
+                args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], text: this.fieldData[i][2] }))
+            } else if (this.fieldData[i][0] != 'field_label' || this.fieldData[i][0] != 'field_dropdown') {
+                args0.push(JSON.stringify({ type: this.fieldData[i][0], name: this.fieldData[i][1][0], check: this.fieldData[i][2] }))
+            }
+        }
+        let blockDataOutput = `import * as Blockly from 'blockly/core';\n\nconst blockName = "${this.blockName}"\n\nconst blockData = {\n    "type": "${this.blockName}",\n    "message0":"${message0}",\n    "args0": ${args0},\n    "colour": "${this.blockColor[0]}",\n    "tooltip":"${this.blockTooltip}",\n    "helpUrl":"${this.blockHelpUrl}"\n    }\n\nBlockly.Blocks[blockName] = {\n    init: function() {\n        this.jsonInit(blockData)\n    }\n\nBlockly.JavaScript[blockName] = function (block) {\n    let code = ''\n    return code\n}`
+        return blockDataOutput
+    }
+}
 
 function startup() {
     console.clear()
@@ -37,6 +54,39 @@ async function setBlockName() {
 
     return usableBlockName
 }
+
+async function setBlockTooltip() {
+    const blockTooltip = await inquirer.prompt({
+        name: 'block_tooltip',
+        type: 'input',
+        message: 'Enter the tooltip of your block',
+        default() {
+            return 'Some Tooltip'
+        },
+    })
+
+    let answer = blockTooltip.block_tooltip
+    console.info(info(`Function name -> setBlockName \nBlock tooltip -> ${answer}`))
+
+    return answer
+}
+
+async function setBlockHelpUrl() {
+    const blockHelpUrl = await inquirer.prompt({
+        name: 'block_help_url',
+        type: 'input',
+        message: 'Enter the tooltip of your block',
+        default() {
+            return 'Some Tooltip'
+        },
+    })
+
+    let answer = blockHelpUrl.block_help_url
+    console.info(info(`Function name -> setBlockName \nBlock tooltip -> ${answer}`))
+
+    return answer
+}
+
 
 async function setBlockColor() {
     const blockColor = await inquirer.prompt({
@@ -172,6 +222,9 @@ async function main() {
     // Getting Variables to initiate the class
     const block_name = await setBlockName()
     const blockColor = await setBlockColor()
+    const blockTooltip = await setBlockTooltip()
+    const blockHelpUrl = await setBlockHelpUrl()
+
     while (true) {
         fieldData.push(await setField())
         console.info(info(fieldData))
@@ -182,8 +235,11 @@ async function main() {
             continue
         }
     }
-    console.info(error(fieldData))
 
+    console.info(error(fieldData))
+    let blokdata = new BlockData(block_name, blockColor, blockTooltip, blockHelpUrl, fieldData)
+    const output = blokdata.generateBlockData()
+    console.log(warning(output))
 }
 
 main()

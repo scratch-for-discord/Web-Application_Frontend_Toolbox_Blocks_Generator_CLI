@@ -5,9 +5,9 @@
 
 ## **Simple to use!**
   ### Install the packages
-  `npm i`
-  ### Run node
-  `node .`
+  `npm i -g s4d-block-generator`
+  ### Run the CLI
+  `gen-new-block`
   ### Answer the form
   ![example](./examples/example1.png)
 
